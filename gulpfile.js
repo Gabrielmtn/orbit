@@ -32,6 +32,7 @@ gulp.task('serve', function(event) {
 });
 gulp.task('less:compile', function(event) {
   return gulp.src([sources.license, sources.less])
+    .pipe(plumber())
     .pipe(concat('orbit.less'))
     .pipe(less())
     .pipe(autoprefix([
