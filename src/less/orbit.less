@@ -10,7 +10,6 @@
   height: 200px;
   width: 100%;
   text-align: center;
-  -webkit-perspective: 600px;
   perspective: 600px;
 }
 .orbit .planet {
@@ -23,17 +22,11 @@
   font-size: 40px;
   text-align: center;
   line-height: 60px;
-  -webkit-transform-style: @orbitTransformStyle;
   transform-style: @orbitTransformStyle;
-  -webkit-animation-duration: @orbitDuration;
   animation-duration: @orbitDuration;
-  -webkit-animation-iteration-count: infinite;
   animation-iteration-count: infinite;
-  -webkit-animation-timing-function: linear;
   animation-timing-function: linear;
-  -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
-  -webkit-transform-origin: center;
   transform-origin: center;
 }
 .orbit .planet:not(.center):hover {
@@ -52,7 +45,7 @@
 .generatePlanets(4);
 
 .orbit .planet.center {
-  transform: translateZ(-125px);
+  transform: translateZ(-250px);
   z-index: 1;
 }
 
@@ -62,19 +55,19 @@
     @selector: e('@{i}%');
     @{selector} {
         & when (@i <= 25) {
-            transform: translateZ(-((@depth/2) + ((@depth/2)/25)*(@i))) translateX(@width - ((@width / 25) * (@i)));
+            transform: translateZ((@depth / 2) - ((@depth / 50) * (@i))) translateX(0 + ((@width / 50) * @i));
             z-index: 0;
         }
         & when (@i > 25) and (@i <= 50) {
-            transform: translateZ(-(@depth - (((@depth/2)/25)*(@i - 25)))) translateX(-((@width / 25) * (@i - 25)));
+            transform: translateZ(0 - ((@depth / 50) * (@i - 25))) translateX((@width / 2) - ((@width / 50) * (@i - 25)));
             z-index: 0;
         }
         & when (@i > 50) and (@i <= 75) {
-            transform: translateZ(-((@depth/2)-(((@depth/2)/25)*(@i - 50)))) translateX(-@width + ((@width / 25) * (@i - 50)));
+            transform: translateZ((-@depth / 2) + ((@depth / 50) * (@i - 50))) translateX(0 - ((@width / 50) * (@i - 50)));
             z-index: 2;
         }
         & when (@i > 75) and (@i <= 100) {
-            transform: translateZ(-(((@depth/2)/25) * (@i - 75))) translateX((@width / 25) * (@i - 75));
+            transform: translateZ(0 + ((@depth / 50) * (@i - 75))) translateX(-(@width / 2) + ((@width / 50) * (@i - 75)));
             z-index: 2;
         }
     }
@@ -83,240 +76,16 @@
   .generateOrbit(100);
 }
 
+@orbitDepth: 500px;
+@orbitWidth: 500px;
+
 .generateOrbits(@n, @i:1) when (@i <= @n) {
   @keyframes ~'goAround@{i}' {
-    .orbit((@i * 100px), (@i * 100%));
+    @depth: (@orbitDepth/@n) * @i;
+    @width: (@orbitWidth/@n) * @i;
+    .orbit(@orbitDepth, @width);
   }
   .generateOrbits(@n, (@i + 1));
 }
 
 .generateOrbits(5);
-
-// @orbitHeight: 200px;
-// @orbitWidth: 100%;
-// @orbitDuration: 5s;
-// @orbitTransformStyle: preserve-3d;
-// h1 {
-//   text-align: center;
-// }
-// .orbit.unrestricted {
-//   position: static;
-// }
-// .orbit {
-//   padding: 0 0 0 0;
-//   position:relative;
-//   margin:  0 0 0 0;
-//   list-style: none;
-//   height: 200px;
-//   width: 100%;
-//   text-align: center;
-//   -webkit-perspective: 600px;
-//   perspective: 600px;
-// }
-// .orbit li {
-//   position: absolute;
-//   left:50%;
-//   top: 50%;
-//   margin-top: -30px;
-//   margin-left: -30px;
-//   list-style: none;
-//   font-size: 40px;
-//   text-align: center;
-//   line-height: 60px;
-//   -webkit-transform-style: @orbitTransformStyle;
-//   transform-style: @orbitTransformStyle;
-//   -webkit-animation-duration: @orbitDuration;
-//   animation-duration: @orbitDuration;
-//   -webkit-animation-iteration-count: infinite;
-//   animation-iteration-count: infinite;
-//   -webkit-animation-timing-function: linear;
-//   animation-timing-function: linear;
-//   -webkit-animation-fill-mode: both;
-//   animation-fill-mode: both;
-//   -webkit-transform-origin: center;
-//   transform-origin: center;
-// }
-// .orbit li:not(.center) div {
-//   height: 100%;
-//   width: 100%;
-// }
-// /* ul:hover li {
-//   -webkit-animation-play-state: paused;
-// } */
-// ul li:not(.center):hover {
-//   -webkit-animation-play-state: paused;
-//   animation-play-state: paused;
-// }
-// ul:hover li:not(.center):hover div a {
-//   color: red;
-// }
-// ul:hover li:not(.center):hover div {
-//   -webkit-transform: scale(1.25);
-//   transform: scale(1.25);
-// }
-// .orbit li:nth-child(1) {
-//   -webkit-animation-name: goAround;
-//   animation-name: goAround;
-// }
-// .orbit li:nth-child(2) {
-//   -webkit-animation-name: goAround2;
-//   animation-name: goAround2;
-// }
-// .orbit li:nth-child(3) {
-//   -webkit-animation-name: goAround3;
-//   animation-name: goAround3;
-// }
-// .orbit li:nth-child(4) {
-//   -webkit-animation-name: goAround4;
-//   animation-name: goAround4;
-// }
-// .orbit li:nth-child(5) {
-//   -webkit-transform: translateZ(-125px);
-//   transform: translateZ(-125px);
-//   z-index: 1;
-// }
-//
-// @orbitDepth: 1000px;
-// @orbitWidth: 400%;
-// .generateOrbit(@n, @i: 0) when (@i <= @n) {
-//   @selector: e('@{i}%');
-//   @{selector} {
-// 	& when (@i <= 25) {
-//      -webkit-transform: translateZ(-(((@orbitDepth/2)/25)*@i)) translateX((@orbitWidth / 25) * @i);
-//      transform: translateX((@orbitWidth / 25) * @i) translateZ(-(((@orbitDepth/2)/25)*@i));
-//      z-index: 2;
-//     }
-// 	& when (@i > 25) and (@i <= 50) {
-//      -webkit-transform: translateZ(-((@orbitDepth/2) + ((@orbitDepth/2)/25)*(@i - 25))) translateX(@orbitWidth - ((@orbitWidth / 25) * (@i - 25)));
-//       transform: translateZ(-((@orbitDepth/2) + ((@orbitDepth/2)/25)*(@i - 25))) translateX(@orbitWidth - ((@orbitWidth / 25) * (@i - 25)));
-//             z-index: 0;
-//     }
-// 	& when (@i > 50) and (@i <= 75) {
-//      -webkit-transform: translateZ(-(@orbitDepth - (((@orbitDepth/2)/25)*(@i - 50)))) translateX(-((@orbitWidth / 25) * (@i - 50)));
-//       transform: translateZ(-(@orbitDepth - (((@orbitDepth/2)/25)*(@i - 50)))) translateX(-((@orbitWidth / 25) * (@i - 50)));
-//             z-index: 0;
-//     }
-// 	& when (@i > 75) and (@i <= 100) {
-//      -webkit-transform: translateZ(-((@orbitDepth/2)-(((@orbitDepth/2)/25)*(@i - 75)))) translateX(-@orbitWidth + ((@orbitWidth / 25) * (@i - 75)));
-//      transform: translateZ(-((@orbitDepth/2)-(((@orbitDepth/2)/25)*(@i - 75)))) translateX(-@orbitWidth + ((@orbitWidth / 25) * (@i - 75)));
-//             z-index: 2;
-//     }
-//   }
-//   .generateOrbit(@n, (@i + 1));
-// }
-//
-// @-webkit-keyframes goAround {
-//   .generateOrbit(100);
-// }
-// @keyframes goAround {
-//   .generateOrbit(100);
-// }
-// @orbitDepth2: 2000px;
-// @orbitWidth2: 1000%;
-// .generateOrbit2(@n, @i:0) when (@i <= @n) {
-//   @selector: e('@{i}%');
-//   @{selector} {
-//     & when (@i <= 25) {
-//      -webkit-transform: translateZ(-((@orbitDepth2/2) + ((@orbitDepth2/2)/25)*(@i))) translateX(@orbitWidth2 - ((@orbitWidth2 / 25) * (@i)));
-//       transform: translateZ(-((@orbitDepth2/2) + ((@orbitDepth2/2)/25)*(@i))) translateX(@orbitWidth2 - ((@orbitWidth2 / 25) * (@i)));
-//             z-index: 0;
-//     }
-//     & when (@i > 25) and (@i <= 50) {
-// -webkit-transform: translateZ(-(@orbitDepth2 - (((@orbitDepth2/2)/25)*(@i - 25)))) translateX(-((@orbitWidth2 / 25) * (@i - 25)));
-//       transform: translateZ(-(@orbitDepth2 - (((@orbitDepth2/2)/25)*(@i - 25)))) translateX(-((@orbitWidth2 / 25) * (@i - 25)));
-//             z-index: 0;
-//     }
-//     & when (@i > 50) and (@i <= 75) {
-//    -webkit-transform: translateZ(-((@orbitDepth2/2)-(((@orbitDepth2/2)/25)*(@i - 50)))) translateX(-@orbitWidth2 + ((@orbitWidth2 / 25) * (@i - 50)));
-//       transform: translateZ(-((@orbitDepth2/2)-(((@orbitDepth2/2)/25)*(@i - 50)))) translateX(-@orbitWidth2 + ((@orbitWidth2 / 25) * (@i - 50)));
-//             z-index: 2;
-//     }
-//     & when (@i > 75) and (@i <= 100) {
-// -webkit-transform: translateZ(-(((@orbitDepth2/2)/25) * (@i - 75))) translateX((@orbitWidth2 / 25) * (@i - 75));
-//       transform: translateZ(-(((@orbitDepth2/2)/25) * (@i - 75))) translateX((@orbitWidth2 / 25) * (@i - 75));
-//             z-index: 2;
-//     }
-//   }
-//   .generateOrbit2(@n, (@i + 1));
-// }
-//
-// @-webkit-keyframes goAround2 {
-//   .generateOrbit2(100);
-// }
-// @keyframes goAround2 {
-//   .generateOrbit2(100);
-// }
-//
-//
-// @orbitDepth3: 250px;
-// @orbitWidth3: 300%;
-// .generateOrbit3(@n, @i:0) when (@i <= @n) {
-//   @selector: e('@{i}%');
-//   @{selector} {
-//     & when (@i <= 25) {
-//       -webkit-transform: translateZ(-(@orbitDepth3 - ((@orbitDepth3/25)*(@i)))) translateX(-((@orbitWidth3 / 25) * (@i)));
-//       transform: translateZ(-(@orbitDepth3 - ((@orbitDepth3/25)*(@i)))) translateX(-((@orbitWidth3 / 25) * (@i)));
-//             z-index: 0;
-//     }
-//     & when (@i > 25) and (@i <= 50) {
-//       -webkit-transform: translateZ((@orbitDepth3/25)*(@i - 25)) translateX(-@orbitWidth3 + ((@orbitWidth3 / 25) * (@i - 25)));
-//       transform: translateZ((@orbitDepth3/25)*(@i - 25)) translateX(-@orbitWidth3 + ((@orbitWidth3 / 25) * (@i - 25)));
-//             z-index: 2;
-//     }
-//     & when (@i > 50) and (@i <= 75) {
-//       -webkit-transform: translateZ(@orbitDepth3 - ((@orbitDepth3/25)*(@i - 50))) translateX((@orbitWidth3 / 25) * (@i - 50));
-//       transform: translateZ(@orbitDepth3 - ((@orbitDepth3/25)*(@i - 50))) translateX((@orbitWidth3 / 25) * (@i - 50));
-//             z-index: 2;
-//     }
-//     & when (@i > 75) and (@i <= 100) {
-//       -webkit-transform: translateZ(-(@orbitDepth3/25)*(@i - 75)) translateX(@orbitWidth3 - ((@orbitWidth3 / 25) * (@i - 75)));
-//     transform: translateZ(-(@orbitDepth3/25)*(@i - 75)) translateX(@orbitWidth3 - ((@orbitWidth3 / 25) * (@i - 75)));
-//             z-index: 0;
-//     }
-//   }
-//   .generateOrbit3(@n, (@i + 1));
-// }
-//
-// @keyframes goAround3 {
-//   .generateOrbit3(100);
-// }
-// @-webkit-keyframes goAround3 {
-//   .generateOrbit3(100);
-// }
-//
-// @orbitDepth4: 300px;
-// @orbitWidth4: 200%;
-// .generateOrbit4(@n, @i:0) when (@i <= @n) {
-//   @selector: e('@{i}%');
-//   @{selector} {
-//     & when (@i <= 25) {
-//       -webkit-transform: translateZ((@orbitDepth4/25)*(@i)) translateX(-@orbitWidth4 + ((@orbitWidth4 / 25) * (@i)));
-//             transform: translateZ((@orbitDepth4/25)*(@i)) translateX(-@orbitWidth4 + ((@orbitWidth4 / 25) * (@i)));
-//
-//             z-index: 2;
-//     }
-//     & when (@i > 25) and (@i <= 50) {
-//       -webkit-transform: translateZ(@orbitDepth4 - ((@orbitDepth4/25)*(@i - 25))) translateX((@orbitWidth4 / 25) * (@i - 25));
-//             transform: translateZ(@orbitDepth4 - ((@orbitDepth4/25)*(@i - 25))) translateX((@orbitWidth4 / 25) * (@i - 25));
-//             z-index: 2;
-//     }
-//     & when (@i > 50) and (@i <= 75) {
-//       -webkit-transform: translateZ(-(@orbitDepth4/25)*(@i - 50)) translateX(@orbitWidth4 - ((@orbitWidth4 / 25) * (@i - 50)));
-//   transform: translateZ(-(@orbitDepth4/25)*(@i - 50)) translateX(@orbitWidth4 - ((@orbitWidth4 / 25) * (@i - 50)));
-//             z-index: 0;
-//     }
-//     & when (@i > 75) and (@i <= 100) {
-//       -webkit-transform: translateZ(-(@orbitDepth4 - ((@orbitDepth4/25)*(@i - 75)))) translateX(-((@orbitWidth4 / 25) * (@i - 75)));
-//             transform: translateZ(-(@orbitDepth4 - ((@orbitDepth4/25)*(@i - 75)))) translateX(-((@orbitWidth4 / 25) * (@i - 75)));
-//             z-index: 0;
-//     }
-//   }
-//   .generateOrbit4(@n, (@i + 1));
-// }
-//
-// @keyframes goAround4 {
-//   .generateOrbit4(100);
-// }
-// @-webkit-keyframes goAround4 {
-//   .generateOrbit4(100);
-// }
