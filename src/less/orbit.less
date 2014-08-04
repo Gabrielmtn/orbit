@@ -1,7 +1,8 @@
 @orbitHeight: 200px;
-@orbitWidth: 100%;
+@orbitWidth: 200px;
 @orbitDuration: 5s;
 @orbitTransformStyle: preserve-3d;
+
 .orbit {
   padding: 0 0 0 0;
   position:relative;
@@ -28,12 +29,17 @@
   animation-timing-function: linear;
   animation-fill-mode: both;
   transform-origin: center;
+  width: 50px;
+  height: 50px;
 }
+
 .orbit [pause-on-hover].planet:not(.center):hover {
   animation-play-state: paused;
 }
+
 .orbit:hover .planet:not(.center):hover {
   transform: scale(1.25);
+  color: red;
 }
 
 
@@ -139,39 +145,33 @@
 
 @orbitDepthOffset: 0px;
 .orbit(@depth, @width, @height) {
-  .generateOrbit(@n, @i:0) when (@i <= @n) {
-    @selector: e('@{i}%');
-    @{selector} {
-        & when (@i <= 25) {
-            transform: translateZ(((@depth / 2) - ((@depth / 50) * (@i))) - @orbitDepthOffset) translateX(0 + ((@width / 50) * @i)) translateY((@height / 2) - ((@height / 50) * (@i)));
-            z-index: 0;
-        }
-        & when (@i > 25) and (@i <= 50) {
-            transform: translateZ((0 - ((@depth / 50) * (@i - 25))) - @orbitDepthOffset) translateX((@width / 2) - ((@width / 50) * (@i - 25))) translateY((0 - ((@height / 50) * (@i - 25))));
-            z-index: 0;
-        }
-        & when (@i > 50) and (@i <= 75) {
-            transform: translateZ(((-@depth / 2) + ((@depth / 50) * (@i - 50))) - @orbitDepthOffset) translateX(0 - ((@width / 50) * (@i - 50))) translateY((-@height / 2) + ((@height / 50) * (@i - 50)));
-            z-index: 2;
-        }
-        & when (@i > 75) and (@i <= 100) {
-            transform: translateZ((0 + ((@depth / 50) * (@i - 75))) - @orbitDepthOffset) translateX(-(@width / 2) + ((@width / 50) * (@i - 75))) translateY(0 + ((@height / 50) * (@i - 75)));
-            z-index: 2;
-        }
+  // .generateOrbit(@n, @i:0) when (@i <= @n) {
+    0% {
+      transform: translateZ(@depth / 2) translateX(0) translateY(@height);
     }
-    .generateOrbit(@n, (@i + 1));
-  }
-  .generateOrbit(100);
+    25% {
+      transform: translateZ(0) translateX(@width) translateY(0)
+    }
+    50% {
+      transform: translateZ(-@depth / 2) translateX(0) translateY(-@height);
+    }
+    75% {
+      transform: translateZ(0) translateX(-@width) translateY(0);
+    }
+    100% {
+      transform: translateZ(@depth / 2) translateX(0) translateY(@height);
+    }
 }
 
-@orbitDepth: 500px;
-@orbitWidth: 500px;
+@orbitDepth: 1000px;
+@orbitWidth: 100%;
+@orbitHeight: 100%;
 
 
 // Generate singular height depth and width orbits
 .genHeightOrbits(@n, @i:1) when (@i <= @n) {
   @keyframes ~'goHigh@{i}' {
-    @height: (@orbitHeight/@numberOfPlanets) * @i; 
+    @height: (@orbitHeight) * @i; 
     .orbit(0, 0, @height);
   }
   .genHeightOrbits(@n, (@i + 1));
@@ -179,7 +179,7 @@
 
 .genWidthOrbits(@n, @i:1) when (@i <= @n) {
   @keyframes ~'goWide@{i}' {
-    @width: (@orbitWidth/@numberOfPlanets) * @i;
+    @width: (@orbitWidth) * @i;
     .orbit(0, @width, 0);
   }
   .genWidthOrbits(@n, (@i + 1));
@@ -187,7 +187,7 @@
 
 .genDepthOrbits(@n, @i:1) when (@i <= @n) {
   @keyframes ~'goDeep@{i}' {
-    @depth: (@orbitDepth/@numberOfPlanets) * @i;
+    @depth: (@orbitDepth / @numberOfPlanets) * @i;
     .orbit(@depth, 0, 0);
   }
   .genDepthOrbits(@n, (@i + 1));
@@ -196,33 +196,33 @@
 // combo orbit keyframes becomes a little more complicated
 .genComboOrbits(@n, @i: 1) when (@i <= @n) {
   @keyframes ~'goWide@{n}High@{i}' {
-    @height: (@orbitHeight/@numberOfPlanets) * @i; 
-    @width: (@orbitWidth/@numberOfPlanets) * @n;
+    @height: (@orbitHeight) * @i; 
+    @width: (@orbitWidth) * @n;
     .orbit(0, @width, @height);
   }
   @keyframes ~'goWide@{n}Deep@{i}' {
     @depth: (@orbitDepth/@numberOfPlanets) * @i;
-    @width: (@orbitWidth/@numberOfPlanets) * @n;
+    @width: (@orbitWidth) * @n;
     .orbit(@depth, @width, 0);
   }
   @keyframes ~'goHigh@{n}Wide@{i}' {
-    @height: (@orbitHeight/@numberOfPlanets) * @n; 
-    @width: (@orbitWidth/@numberOfPlanets) * @i;
+    @height: (@orbitHeight) * @n; 
+    @width: (@orbitWidth) * @i;
     .orbit(0, @width, @height);
   }
   @keyframes ~'goHigh@{n}Deep@{i}' {
-    @height: (@orbitHeight/@numberOfPlanets) * @n; 
+    @height: (@orbitHeight) * @n; 
     @depth: (@orbitDepth/@numberOfPlanets) * @i;
     .orbit(@depth, 0, @height);
   }
   @keyframes ~'goDeep@{n}High@{i}' {
-    @height: (@orbitHeight/@numberOfPlanets) * @i; 
+    @height: (@orbitHeight) * @i; 
     @depth: (@orbitDepth/@numberOfPlanets) * @n;
     .orbit(@depth, 0, @height);
   }
   @keyframes ~'goDeep@{n}Wide@{i}' {
     @depth: (@orbitDepth/@numberOfPlanets) * @n;
-    @width: (@orbitWidth/@numberOfPlanets) * @i;
+    @width: (@orbitWidth) * @i;
     .orbit(@depth, @width, 0);
   }
   .genComboOrbits(@n, (@i + 1));
@@ -237,38 +237,38 @@
   .genOrbitDeep(@n, @i: 1) when (@i <= @n) {
     @keyframes ~'goWide@{turn}High@{n}Deep@{i}' {
       @depth: (@orbitDepth/@numberOfPlanets) * @i;
-      @width: (@orbitWidth/@numberOfPlanets) * @turn;
-      @height: (@orbitHeight/@numberOfPlanets) * @n;
+      @width: (@orbitWidth) * @turn;
+      @height: (@orbitHeight) * @n;
       .orbit(@depth, @width, @height);
     }
     @keyframes ~'goWide@{turn}Deep@{n}High@{i}' {
       @depth: (@orbitDepth/@numberOfPlanets) * @n;
-      @width: (@orbitWidth/@numberOfPlanets) * @turn;
-      @height: (@orbitHeight/@numberOfPlanets) * @i;
+      @width: (@orbitWidth) * @turn;
+      @height: (@orbitHeight) * @i;
       .orbit(@depth, @width, @height);
     }
     @keyframes ~'goHigh@{turn}Wide@{n}Deep@{i}' {
       @depth: (@orbitDepth/@numberOfPlanets) * @i;
-      @width: (@orbitWidth/@numberOfPlanets) * @n;
-      @height: (@orbitHeight/@numberOfPlanets) * @turn;
+      @width: (@orbitWidth) * @n;
+      @height: (@orbitHeight) * @turn;
       .orbit(@depth, @width, @height);
     }
     @keyframes ~'goHigh@{turn}Deep@{n}Wide@{i}' {
       @depth: (@orbitDepth/@numberOfPlanets) * @n;
-      @width: (@orbitWidth/@numberOfPlanets) * @i;
-      @height: (@orbitHeight/@numberOfPlanets) * @turn;
+      @width: (@orbitWidth) * @i;
+      @height: (@orbitHeight) * @turn;
       .orbit(@depth, @width, @height);
     }
     @keyframes ~'goDeep@{turn}High@{n}Wide@{i}' {
       @depth: (@orbitDepth/@numberOfPlanets) * @turn;
-      @width: (@orbitWidth/@numberOfPlanets) * @i;
-      @height: (@orbitHeight/@numberOfPlanets) * @n;
+      @width: (@orbitWidth) * @i;
+      @height: (@orbitHeight) * @n;
       .orbit(@depth, @width, @height);
     }
     @keyframes ~'goDeep@{turn}Wide@{n}High@{i}' {
       @depth: (@orbitDepth/@numberOfPlanets) * @turn;
-      @width: (@orbitWidth/@numberOfPlanets) * @i;
-      @height: (@orbitHeight/@numberOfPlanets) * @n;
+      @width: (@orbitWidth) * @n;
+      @height: (@orbitHeight) * @i;
       .orbit(@depth, @width, @height);
     }
     .genOrbitDeep(@n, (@i + 1));
