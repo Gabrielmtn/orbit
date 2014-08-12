@@ -1,5 +1,11 @@
 @orbitContainerHeight: 200px;
 @orbitContainerWidth: 350px;
+// These variables determine what is created and the magnitudes of what is created. However I think that variables need renaming etc.
+@numberOfPlanets: 4;
+@orbitDepth: 1000px;
+@orbitWidth: 100%;
+@orbitHeight: 100%;
+@orbitDepthOffset: 0px;
 // The planet width is calculated in a way such that each will be of equal size in order to calculate an accurate width for the container.
 @planetWidth: @orbitContainerWidth / ((@numberOfPlanets * 2) + 1);
 @orbitPerspective: 600px;
@@ -34,6 +40,12 @@
   width: @planetWidth;
   height: @planetWidth;
 }
+
+.orbit .planet.center {
+  transform: translateZ(0 - @orbitDepthOffset);
+  z-index: 1;
+}
+
 // Enables planets to be paused on hover(tap on mobile)
 .orbit [pause-on-hover].planet:not(.center):hover {
   animation-play-state: paused;
@@ -46,11 +58,20 @@
 
 // Orbit is mostly implemented using a series of loops based on the range of magnitudes (or number of planets) you wish to use.
 // It calculates all the different combinations of depth, width, and height to give a range of combinations that can be used.
+.genHeight(@numberOfPlanets);
+.genWidth(@numberOfPlanets);
+.genDepth(@numberOfPlanets);
+.generateCombos(@numberOfPlanets);
+.generateTernaryCombos(@numberOfPlanets);
 //  It first, generates the different mark up combinations and the animation names required. After, it then generates the different keyframes to be used.
 
 .genDepth(@n, @i:1) when (@i <= @n) {
   .orbit .planet[data-orbit-depth="@{i}"] {
     animation-name: ~'goDeep@{i}';
+  }
+  @keyframes ~'goDeep@{i}' {
+    @depth: (@orbitDepth / @numberOfPlanets) * @i;
+    .orbit(@depth, 0, 0);
   }
   .genDepth(@n, (@i + 1));
 }
@@ -59,12 +80,20 @@
   .orbit .planet[data-orbit-height="@{i}"] {
     animation-name: ~'goHigh@{i}';
   }
+  @keyframes ~'goHigh@{i}' {
+    @height: (@orbitHeight) * @i;
+    .orbit(0, 0, @height);
+  }
   .genHeight(@n, (@i + 1));
 }
 
 .genWidth(@n, @i:1) when (@i <= @n) {
   .orbit .planet[data-orbit-width="@{i}"] {
     animation-name: ~'goWide@{i}';
+  }
+  @keyframes ~'goWide@{i}' {
+    @width: (@orbitWidth/@numberOfPlanets) * @i;
+    .orbit(0, @width, 0);
   }
   .genWidth(@n, (@i + 1));
 }
@@ -73,6 +102,7 @@
 // Once we've done singular keyframes then we must think about when we have two attributes defined.
 .generateCombos(@n, @i:1) when (@i <= @n) {
   .genCombo(@i);
+  .genComboOrbits(@i);
   .generateCombos(@n, (@i + 1));
 }
 
@@ -96,6 +126,40 @@
     animation-name: ~'goDeep@{n}Wide@{i}';
   }
   .genCombo(@n, (@i + 1));
+}
+// combo orbit keyframes becomes a little more complicated
+.genComboOrbits(@n, @i: 1) when (@i <= @n) {
+  @keyframes ~'goWide@{n}High@{i}' {
+    @height: (@orbitHeight) * @i;
+    @width: (@orbitWidth) * @n;
+    .orbit(0, @width, @height);
+  }
+  @keyframes ~'goWide@{n}Deep@{i}' {
+    @depth: (@orbitDepth/@numberOfPlanets) * @i;
+    @width: (@orbitWidth) * @n;
+    .orbit(@depth, @width, 0);
+  }
+  @keyframes ~'goHigh@{n}Wide@{i}' {
+    @height: (@orbitHeight) * @n;
+    @width: (@orbitWidth) * @i;
+    .orbit(0, @width, @height);
+  }
+  @keyframes ~'goHigh@{n}Deep@{i}' {
+    @height: (@orbitHeight) * @n;
+    @depth: (@orbitDepth/@numberOfPlanets) * @i;
+    .orbit(@depth, 0, @height);
+  }
+  @keyframes ~'goDeep@{n}High@{i}' {
+    @height: (@orbitHeight) * @i;
+    @depth: (@orbitDepth/@numberOfPlanets) * @n;
+    .orbit(@depth, 0, @height);
+  }
+  @keyframes ~'goDeep@{n}Wide@{i}' {
+    @depth: (@orbitDepth/@numberOfPlanets) * @n;
+    @width: (@orbitWidth) * @i;
+    .orbit(@depth, @width, 0);
+  }
+  .genComboOrbits(@n, (@i + 1));
 }
 
 // Lastly, we generate the triple combos where we have three attributes defined.
@@ -134,112 +198,13 @@
 
 .generateTernaryCombos(@n, @i: 1) when (@i <= @n) {
   .genTernary(@i);
+  .genTernaryOrbit(@i);
   .generateTernaryCombos(@n, (@i + 1));
 }
-
-
-@numberOfPlanets: 4;
-.genHeight(@numberOfPlanets);
-.genWidth(@numberOfPlanets);
-.genDepth(@numberOfPlanets);
-.generateCombos(@numberOfPlanets);
-.generateTernaryCombos(@numberOfPlanets);
-
-.orbit .planet.center {
-  transform: translateZ(0 - @orbitDepthOffset);
-  z-index: 1;
+.genTernaryOrbit(@n, @i: 1) when (@i <= @n) {
+  .genTernaryOrbitDeep(@n, @i);
+  .genTernaryOrbit(@n, (@i + 1));
 }
-
-@orbitDepthOffset: 0px;
-.orbit(@depth, @width, @height) {
-  // .generateOrbit(@n, @i:0) when (@i <= @n) {
-    0% {
-      transform: translateZ(@depth / 2) translateX(0) translateY(@height);
-    }
-    25% {
-      transform: translateZ(0) translateX(@width) translateY(0)
-    }
-    50% {
-      transform: translateZ(-@depth / 2) translateX(0) translateY(-@height);
-    }
-    75% {
-      transform: translateZ(0) translateX(-@width) translateY(0);
-    }
-    100% {
-      transform: translateZ(@depth / 2) translateX(0) translateY(@height);
-    }
-}
-
-@orbitDepth: 1000px;
-@orbitWidth: 100%;
-@orbitHeight: 100%;
-
-
-// Generate singular height depth and width orbits
-.genHeightOrbits(@n, @i:1) when (@i <= @n) {
-  @keyframes ~'goHigh@{i}' {
-    @height: (@orbitHeight) * @i;
-    .orbit(0, 0, @height);
-  }
-  .genHeightOrbits(@n, (@i + 1));
-}
-
-.genWidthOrbits(@n, @i:1) when (@i <= @n) {
-  @keyframes ~'goWide@{i}' {
-    @width: (@orbitWidth) * @i;
-    .orbit(0, @width, 0);
-  }
-  .genWidthOrbits(@n, (@i + 1));
-}
-
-.genDepthOrbits(@n, @i:1) when (@i <= @n) {
-  @keyframes ~'goDeep@{i}' {
-    @depth: (@orbitDepth / @numberOfPlanets) * @i;
-    .orbit(@depth, 0, 0);
-  }
-  .genDepthOrbits(@n, (@i + 1));
-}
-
-// combo orbit keyframes becomes a little more complicated
-.genComboOrbits(@n, @i: 1) when (@i <= @n) {
-  @keyframes ~'goWide@{n}High@{i}' {
-    @height: (@orbitHeight) * @i;
-    @width: (@orbitWidth) * @n;
-    .orbit(0, @width, @height);
-  }
-  @keyframes ~'goWide@{n}Deep@{i}' {
-    @depth: (@orbitDepth/@numberOfPlanets) * @i;
-    @width: (@orbitWidth) * @n;
-    .orbit(@depth, @width, 0);
-  }
-  @keyframes ~'goHigh@{n}Wide@{i}' {
-    @height: (@orbitHeight) * @n;
-    @width: (@orbitWidth) * @i;
-    .orbit(0, @width, @height);
-  }
-  @keyframes ~'goHigh@{n}Deep@{i}' {
-    @height: (@orbitHeight) * @n;
-    @depth: (@orbitDepth/@numberOfPlanets) * @i;
-    .orbit(@depth, 0, @height);
-  }
-  @keyframes ~'goDeep@{n}High@{i}' {
-    @height: (@orbitHeight) * @i;
-    @depth: (@orbitDepth/@numberOfPlanets) * @n;
-    .orbit(@depth, 0, @height);
-  }
-  @keyframes ~'goDeep@{n}Wide@{i}' {
-    @depth: (@orbitDepth/@numberOfPlanets) * @n;
-    @width: (@orbitWidth) * @i;
-    .orbit(@depth, @width, 0);
-  }
-  .genComboOrbits(@n, (@i + 1));
-}
-.generateComboOrbits(@n, @i: 1) when (@i <= @n) {
-  .genComboOrbits(@i);
-  .generateComboOrbits(@n, (@i + 1));
-}
-
-//Ternary combo is of course a bit of a killer but bearable.
 .genTernaryOrbitDeep(@turn, @round) {
   .genOrbitDeep(@n, @i: 1) when (@i <= @n) {
     @keyframes ~'goWide@{turn}High@{n}Deep@{i}' {
@@ -282,18 +247,23 @@
   }
   .genOrbitDeep(@round);
 }
-.genTernaryOrbit(@n, @i: 1) when (@i <= @n) {
-  .genTernaryOrbitDeep(@n, @i);
-  .genTernaryOrbit(@n, (@i + 1));
-}
-.generateTernaryComboOrbits(@n, @i: 1) when (@i <= @n) {
-  .genTernaryOrbit(@i);
-  .generateTernaryComboOrbits(@n, (@i + 1));
-}
-// END TERNARY COMBO GEN
 
-.genHeightOrbits(@numberOfPlanets);
-.genWidthOrbits(@numberOfPlanets);
-.genDepthOrbits(@numberOfPlanets);
-.generateComboOrbits(@numberOfPlanets);
-.generateTernaryComboOrbits(@numberOfPlanets);
+
+
+.orbit(@depth, @width, @height) {
+    0% {
+      transform: translateZ(@depth / 2) translateX(0) translateY(@height);
+    }
+    25% {
+      transform: translateZ(0) translateX(@width) translateY(0)
+    }
+    50% {
+      transform: translateZ(-@depth / 2) translateX(0) translateY(-@height);
+    }
+    75% {
+      transform: translateZ(0) translateX(-@width) translateY(0);
+    }
+    100% {
+      transform: translateZ(@depth / 2) translateX(0) translateY(@height);
+    }
+}
