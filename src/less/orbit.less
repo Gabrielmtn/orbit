@@ -7,7 +7,7 @@
 
 // Orbit needs a container to sit in. This becomes relavant when dealing with different viewport sizes. The container dimensions are also used to calculat the size of our orbit wrappers in this foundation. You are of course free to size them however you like and experiment to achieve different effects.
 @orbitContainerHeight: 200px;
-@orbitContainerWidth: 350px;
+@orbitContainerWidth: 400px;
 // The planet width is calculated in a way such that each will be of equal size in order to calculate an accurate width for the container. You could use this as a wrapper and then have different sizes for content or just override it completely and set an overflow hidden on the container.
 @planetWidth: @orbitContainerWidth / ((@magnitudes * 2) + 1);
 
@@ -18,8 +18,8 @@
 @orbitHeightOffset: 0px;
 @orbitWidthOffset: 0px;
 // The orbit width and height defines the maximum width and height of orbit respectively for an orbiting element. I've chosen to go with magnitude multiplied by 100% to try and work towards a responsive solution. Note, I'm using translateX and translateY so 100% translation equates in pixels to the height and width of the orbiting element.
-@orbitWidth: (100% * @magnitudes);
-@orbitHeight: (100% * @magnitudes);
+@orbitWidth: (@orbitContainerWidth / 2) - @planetWidth;
+@orbitHeight: (@orbitContainerHeight / 2) - @planetWidth;
 // These variables define animation styles for orbit. May look to introduce different animation durations for planets and delays.
 @orbitPerspective: 600px;
 @orbitDuration: 5s;
