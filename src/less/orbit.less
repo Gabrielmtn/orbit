@@ -1,32 +1,47 @@
+/*
+  Orbit
+
+  Orbit is an experimental stylesheet for creating orbital effects. I've tried to comment the code the best I can to make it easy to tweak here and there. The best thing to do though is experiment and change things to achieve the desired effects you want.
+
+*/
+
+// Orbit needs a container to sit in. This becomes relavant when dealing with different viewport sizes. The container dimensions are also used to calculat the size of our orbit wrappers in this foundation. You are of course free to size them however you like and experiment to achieve different effects.
 @orbitContainerHeight: 200px;
 @orbitContainerWidth: 350px;
-// These variables determine what is created and the magnitudes of what is created. However I think that variables need renaming etc.
-@numberOfPlanets: 4;
-@orbitDepth: 1000px;
-@orbitWidth: 100%;
-@orbitHeight: 100%;
-@orbitDepthOffset: 0px;
-// The planet width is calculated in a way such that each will be of equal size in order to calculate an accurate width for the container.
-@planetWidth: @orbitContainerWidth / ((@numberOfPlanets * 2) + 1);
+// The planet width is calculated in a way such that each will be of equal size in order to calculate an accurate width for the container. You could use this as a wrapper and then have different sizes for content or just override it completely and set an overflow hidden on the container.
+@planetWidth: @orbitContainerWidth / ((@magnitudes * 2) + 1);
+
+// These variables determine what is created and the magnitudes of what is created.
+@magnitudes: 4; // Defines the amount of levels that are created. ie. the levels of height, width and depth that are created.
+@orbitDepth: 1000px; //The depth must be defined in pixels. And defines the Z axis depth for Orbit.
+@orbitDepthOffset: 0px; // You can set an offset so that it doesn't feel like things are orbiting towards you and are instead more contained.
+@orbitHeightOffset: 0px;
+@orbitWidthOffset: 0px;
+// The orbit width and height defines the maximum width and height of orbit respectively for an orbiting element. I've chosen to go with magnitude multiplied by 100% to try and work towards a responsive solution. Note, I'm using translateX and translateY so 100% translation equates in pixels to the height and width of the orbiting element.
+@orbitWidth: (100% * @magnitudes);
+@orbitHeight: (100% * @magnitudes);
+// These variables define animation styles for orbit. May look to introduce different animation durations for planets and delays.
 @orbitPerspective: 600px;
 @orbitDuration: 5s;
 @orbitTransformStyle: preserve-3d;
 
 .orbit {
-  padding: 0 0 0 0;
   position: relative;
-  margin:  0 0 0 0;
-  list-style: none;
   height: @orbitContainerHeight;
   width: @orbitContainerWidth;
-  text-align: center;
   perspective: @orbitPerspective;
+  margin:  0 0 0 0;
+  padding: 0 0 0 0;
+  list-style: none;
+  text-align: center;
 }
 .orbit .planet {
   position: absolute;
   left:50%;
   top: 50%;
-  font-size: 60px;
+  width: @planetWidth;
+  height: @planetWidth;
+  font-size: @planetWidth;
   margin-top: -(@planetWidth / 2);
   margin-left: -(@planetWidth / 2);
   list-style: none;
@@ -37,40 +52,34 @@
   animation-timing-function: linear;
   animation-fill-mode: both;
   transform-origin: center;
-  width: @planetWidth;
-  height: @planetWidth;
 }
-
+// The element being orbited.
 .orbit .planet.center {
   transform: translateZ(0 - @orbitDepthOffset);
   z-index: 1;
 }
 
-// Enables planets to be paused on hover(tap on mobile)
+// Enables elements to be paused on hover(tap on mobile)
 .orbit [pause-on-hover].planet:not(.center):hover {
   animation-play-state: paused;
-}
-.orbit:hover .planet:not(.center):hover {
   transform: scale(1.25);
   color: red;
 }
 
-
 // Orbit is mostly implemented using a series of loops based on the range of magnitudes (or number of planets) you wish to use.
 // It calculates all the different combinations of depth, width, and height to give a range of combinations that can be used.
-.genHeight(@numberOfPlanets);
-.genWidth(@numberOfPlanets);
-.genDepth(@numberOfPlanets);
-.generateCombos(@numberOfPlanets);
-.generateTernaryCombos(@numberOfPlanets);
+.genHeight(@magnitudes);
+.genWidth(@magnitudes);
+.genDepth(@magnitudes);
+.generateCombos(@magnitudes);
+.generateTernaryCombos(@magnitudes);
 //  It first, generates the different mark up combinations and the animation names required. After, it then generates the different keyframes to be used.
-
 .genDepth(@n, @i:1) when (@i <= @n) {
   .orbit .planet[data-orbit-depth="@{i}"] {
     animation-name: ~'goDeep@{i}';
   }
   @keyframes ~'goDeep@{i}' {
-    @depth: (@orbitDepth / @numberOfPlanets) * @i;
+    @depth: (@orbitDepth / @magnitudes) * @i;
     .orbit(@depth, 0, 0);
   }
   .genDepth(@n, (@i + 1));
@@ -92,7 +101,7 @@
     animation-name: ~'goWide@{i}';
   }
   @keyframes ~'goWide@{i}' {
-    @width: (@orbitWidth/@numberOfPlanets) * @i;
+    @width: (@orbitWidth/@magnitudes) * @i;
     .orbit(0, @width, 0);
   }
   .genWidth(@n, (@i + 1));
@@ -130,33 +139,33 @@
 // combo orbit keyframes becomes a little more complicated
 .genComboOrbits(@n, @i: 1) when (@i <= @n) {
   @keyframes ~'goWide@{n}High@{i}' {
-    @height: (@orbitHeight) * @i;
-    @width: (@orbitWidth) * @n;
+    @height: (@orbitHeight/@magnitudes) * @i;
+    @width: (@orbitWidth/@magnitudes) * @n;
     .orbit(0, @width, @height);
   }
   @keyframes ~'goWide@{n}Deep@{i}' {
-    @depth: (@orbitDepth/@numberOfPlanets) * @i;
-    @width: (@orbitWidth) * @n;
+    @depth: (@orbitDepth/@magnitudes) * @i;
+    @width: (@orbitWidth/@magnitudes) * @n;
     .orbit(@depth, @width, 0);
   }
   @keyframes ~'goHigh@{n}Wide@{i}' {
-    @height: (@orbitHeight) * @n;
-    @width: (@orbitWidth) * @i;
+    @height: (@orbitHeight/@magnitudes) * @n;
+    @width: (@orbitWidth/@magnitudes) * @i;
     .orbit(0, @width, @height);
   }
   @keyframes ~'goHigh@{n}Deep@{i}' {
-    @height: (@orbitHeight) * @n;
-    @depth: (@orbitDepth/@numberOfPlanets) * @i;
+    @height: (@orbitHeight/@magnitudes) * @n;
+    @depth: (@orbitDepth/@magnitudes) * @i;
     .orbit(@depth, 0, @height);
   }
   @keyframes ~'goDeep@{n}High@{i}' {
-    @height: (@orbitHeight) * @i;
-    @depth: (@orbitDepth/@numberOfPlanets) * @n;
+    @height: (@orbitHeight/@magnitudes) * @i;
+    @depth: (@orbitDepth/@magnitudes) * @n;
     .orbit(@depth, 0, @height);
   }
   @keyframes ~'goDeep@{n}Wide@{i}' {
-    @depth: (@orbitDepth/@numberOfPlanets) * @n;
-    @width: (@orbitWidth) * @i;
+    @depth: (@orbitDepth/@magnitudes) * @n;
+    @width: (@orbitWidth/@magnitudes) * @i;
     .orbit(@depth, @width, 0);
   }
   .genComboOrbits(@n, (@i + 1));
@@ -208,39 +217,39 @@
 .genTernaryOrbitDeep(@turn, @round) {
   .genOrbitDeep(@n, @i: 1) when (@i <= @n) {
     @keyframes ~'goWide@{turn}High@{n}Deep@{i}' {
-      @depth: (@orbitDepth/@numberOfPlanets) * @i;
-      @width: (@orbitWidth) * @turn;
-      @height: (@orbitHeight) * @n;
+      @depth: (@orbitDepth/@magnitudes) * @i;
+      @width: (@orbitWidth/@magnitudes) * @turn;
+      @height: (@orbitHeight/@magnitudes) * @n;
       .orbit(@depth, @width, @height);
     }
     @keyframes ~'goWide@{turn}Deep@{n}High@{i}' {
-      @depth: (@orbitDepth/@numberOfPlanets) * @n;
-      @width: (@orbitWidth) * @turn;
-      @height: (@orbitHeight) * @i;
+      @depth: (@orbitDepth/@magnitudes) * @n;
+      @width: (@orbitWidth/@magnitudes) * @turn;
+      @height: (@orbitHeight/@magnitudes) * @i;
       .orbit(@depth, @width, @height);
     }
     @keyframes ~'goHigh@{turn}Wide@{n}Deep@{i}' {
-      @depth: (@orbitDepth/@numberOfPlanets) * @i;
-      @width: (@orbitWidth) * @n;
-      @height: (@orbitHeight) * @turn;
+      @depth: (@orbitDepth/@magnitudes) * @i;
+      @width: (@orbitWidth/@magnitudes) * @n;
+      @height: (@orbitHeight/@magnitudes) * @turn;
       .orbit(@depth, @width, @height);
     }
     @keyframes ~'goHigh@{turn}Deep@{n}Wide@{i}' {
-      @depth: (@orbitDepth/@numberOfPlanets) * @n;
-      @width: (@orbitWidth) * @i;
-      @height: (@orbitHeight) * @turn;
+      @depth: (@orbitDepth/@magnitudes) * @n;
+      @width: (@orbitWidth/@magnitudes) * @i;
+      @height: (@orbitHeight/@magnitudes) * @turn;
       .orbit(@depth, @width, @height);
     }
     @keyframes ~'goDeep@{turn}High@{n}Wide@{i}' {
-      @depth: (@orbitDepth/@numberOfPlanets) * @turn;
-      @width: (@orbitWidth) * @i;
-      @height: (@orbitHeight) * @n;
+      @depth: (@orbitDepth/@magnitudes) * @turn;
+      @width: (@orbitWidth/@magnitudes) * @i;
+      @height: (@orbitHeight/@magnitudes) * @n;
       .orbit(@depth, @width, @height);
     }
     @keyframes ~'goDeep@{turn}Wide@{n}High@{i}' {
-      @depth: (@orbitDepth/@numberOfPlanets) * @turn;
-      @width: (@orbitWidth) * @n;
-      @height: (@orbitHeight) * @i;
+      @depth: (@orbitDepth/@magnitudes) * @turn;
+      @width: (@orbitWidth/@magnitudes) * @n;
+      @height: (@orbitHeight/@magnitudes) * @i;
       .orbit(@depth, @width, @height);
     }
     .genOrbitDeep(@n, (@i + 1));
@@ -248,22 +257,21 @@
   .genOrbitDeep(@round);
 }
 
-
-
+// This orbit mixin is what defines the various keyframes for the different combinations for orbiting elements.
 .orbit(@depth, @width, @height) {
     0% {
-      transform: translateZ(@depth / 2) translateX(0) translateY(@height);
+      transform: translateZ((@depth / 2) - @orbitDepthOffset) translateX(0 - @orbitWidthOffset) translateY(@height - @orbitHeightOffset);
     }
     25% {
-      transform: translateZ(0) translateX(@width) translateY(0)
+      transform: translateZ(0 - @orbitDepthOffset) translateX(@width - @orbitWidthOffset) translateY(0 - @orbitHeightOffset)
     }
     50% {
-      transform: translateZ(-@depth / 2) translateX(0) translateY(-@height);
+      transform: translateZ((-@depth / 2) - @orbitDepthOffset) translateX(0 - @orbitWidthOffset) translateY(-@height - @orbitHeightOffset);
     }
     75% {
-      transform: translateZ(0) translateX(-@width) translateY(0);
+      transform: translateZ(0 - @orbitDepthOffset) translateX(-@width - @orbitWidthOffset) translateY(0 - @orbitHeightOffset);
     }
     100% {
-      transform: translateZ(@depth / 2) translateX(0) translateY(@height);
+      transform: translateZ((@depth / 2) - @orbitDepthOffset) translateX(0 - @orbitWidthOffset) translateY(@height - @orbitHeightOffset);
     }
 }
