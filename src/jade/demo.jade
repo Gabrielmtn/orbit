@@ -22,6 +22,8 @@ head
       padding: 10px;
       border-radius: 5px;
       color: #333;
+      max-width: 400px;
+      margin: 20px auto;
     }
     .planets {
       background: black;
@@ -31,23 +33,32 @@ head
       width: 100%;
       border-radius: 100%;
     }
+    .planets {
+      border-radius: 5px 5px 5px 5px;
+    }
     .planets .center div {
       background: grey;
-    }
-    .planets .red div {
-      background: red;
+      width: 50%;
+      height: 50%;
+      margin: 0 auto;
     }
     .planets .orange div {
       background: orange;
+      height: 10%;
+      width: 15%;
+    }
+    .planets .red div {
+      background: red;
+      height: 25%;
+      width: 15%;
     }
     .planets .green div {
       background: green;
-    }
-    .planets .blue div {
-      background: blue;
+      height: 30%;
+      width: 40%;
     }
 body.container
-  header
+  header.row
     .col-md-12
       ul.orbit(style="margin:0 auto;")
         li.planet.center
@@ -60,19 +71,24 @@ body.container
           div i
         li.planet(pause-on-hover, data-orbit-width="4", data-orbit-depth="3")
           div t
-  content
-    .col-md-4
+  content.row
+    .col-md-12
       p.info.text-center.
         <strong>orbit.css</strong> is an experiment with CSS preprocessors to create an easily consumbale orbital effect for DOM elements.
-    .col-md-8
+    .col-md-12
       ul.orbit.planets(style="margin:0 auto;")
         li.planet.center
           div
-        li.planet.red(pause-on-hover, data-orbit-width="1", data-orbit-depth="3")
+        li.planet.orange(pause-on-hover, data-orbit-width="1", data-orbit-depth="1", data-orbit-duration="8")
           div
-        li.planet.orange(pause-on-hover, data-orbit-width="2", data-orbit-depth="3")
+        li.planet.red(pause-on-hover, data-orbit-width="3", data-orbit-height="2", data-orbit-depth="2", data-orbit-duration="10")
           div
-        li.planet.green(pause-on-hover, data-orbit-width="3", data-orbit-depth="3")
+        li.planet.green(pause-on-hover, data-orbit-width="4", data-orbit-depth="4", data-orbit-duration="5")
           div
-        li.planet.blue(pause-on-hover, data-orbit-width="4", data-orbit-depth="3")
-          div
+    .col-md-12
+      p.info.text-center.
+        Check out the <a href="https://github.com/jh3y/orbit" target="_blank">docs</a> to see how to configure and use it in your own projects.
+    .col-md-12.text-center
+        iframe(src = "http://ghbtns.com/github-btn.html?user=jh3y&repo=orbit&type=watch&count=true", allowtransparency="true", frameborder="0", scrolling="0", width="90px", height="20")
+        iframe(src = "http://ghbtns.com/github-btn.html?user=jh3y&repo=orbit&type=fork&count=true", allowtransparency="true", frameborder="0", scrolling="0", width="90px", height="20")
+        iframe(src = "http://ghbtns.com/github-btn.html?user=jh3y&repo=orbit&type=follow&count=true", allowtransparency="true", frameborder="0", scrolling="0", width="120px", height="20")
