@@ -1,24 +1,78 @@
 doctype
+//[if lt IE 7]> <html class="no-js ie lt-ie9 lt-ie8 lt-ie7" lang="en" xmlns:ng="http://angularjs.org"> <![endif]
+//[if IE 7]> <html class="no-js ie lt-ie9 lt-ie8" lang="en" xmlns:ng="http://angularjs.org"> <![endif]
+//[if IE 8]> <html class="no-js ie lt-ie9" lang="en" xmlns:ng="http://angularjs.org"> <![endif]
+//[if gt IE 8]><!--> <html class="no-js" lang="en" xmlns:ng="http://angularjs.org"> <!--<![endif]
 head
-  title dev: orbit
+  meta(charset="utf-8")
+  meta(http-equiv="X-UA-Compatible", content="IE=edge")
+  title orbit: orbital effects in CSS
+  meta(name="viewport", content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1.0")
+  link(rel="author", href="https://plus.google.com/117254872800566192455/")
+  link(rel="author", href="Jhey Tompkins")
   link(rel="stylesheet", href="css/orbit.min.css")
-body
-  p(style="text-align:center;").
-    orbit is a little experiment with CSS keyframes to see if I can make an orbital effect with CSS.
-  footer
-    ul.orbit(style="margin:0 auto;")
-      li.planet.center
-        div
-          a o
-      li.planet(pause-on-hover, data-orbit-width="1", data-orbit-depth="3")
-        div
-          a r
-      li.planet(pause-on-hover, data-orbit-width="2", data-orbit-depth="3")
-        div
-          a b
-      li.planet(pause-on-hover, data-orbit-width="3", data-orbit-depth="3")
-        div
-          a i
-      li.planet(pause-on-hover, data-orbit-width="4", data-orbit-depth="3")
-        div
-          a t
+  link(rel="stylesheet", href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css")
+  style.
+    body {
+      background: #242e69;
+      color: #fff;
+    }
+    .info {
+      background: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      color: #333;
+    }
+    .planets {
+      background: black;
+    }
+    .planets div {
+      height: 100%;
+      width: 100%;
+      border-radius: 100%;
+    }
+    .planets .center div {
+      background: grey;
+    }
+    .planets .red div {
+      background: red;
+    }
+    .planets .orange div {
+      background: orange;
+    }
+    .planets .green div {
+      background: green;
+    }
+    .planets .blue div {
+      background: blue;
+    }
+body.container
+  header.row
+    .col-md-12
+      ul.orbit(style="margin:0 auto;")
+        li.planet.center
+          div o
+        li.planet(pause-on-hover, data-orbit-width="1", data-orbit-depth="3")
+          div r
+        li.planet(pause-on-hover, data-orbit-width="2", data-orbit-depth="3")
+          div b
+        li.planet(pause-on-hover, data-orbit-width="3", data-orbit-depth="3")
+          div i
+        li.planet(pause-on-hover, data-orbit-width="4", data-orbit-depth="3")
+          div t
+  content.row
+    .col-md-4
+      p.info.text-center.
+        <strong>orbit.css</strong> is an experiment with CSS preprocessors to create an easily consumbale orbital effect for DOM elements.
+    .col-md-8
+      ul.orbit.planets(style="margin:0 auto;")
+        li.planet.center
+          div
+        li.planet.red(pause-on-hover, data-orbit-width="1", data-orbit-depth="3")
+          div
+        li.planet.orange(pause-on-hover, data-orbit-width="2", data-orbit-depth="3")
+          div
+        li.planet.green(pause-on-hover, data-orbit-width="3", data-orbit-depth="3")
+          div
+        li.planet.blue(pause-on-hover, data-orbit-width="4", data-orbit-depth="3")
+          div
