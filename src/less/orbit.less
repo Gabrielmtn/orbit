@@ -273,17 +273,22 @@
 .orbit(@depth, @width, @height) {
     0% {
       transform: translateZ((@depth / 2) - @orbitDepthOffset) translateX(0 - @orbitWidthOffset) translateY(@height - @orbitHeightOffset);
+      z-index: 3;
     }
     25% {
-      transform: translateZ(0 - @orbitDepthOffset) translateX(@width - @orbitWidthOffset) translateY(0 - @orbitHeightOffset)
+      transform: translateZ(0 - @orbitDepthOffset) translateX(@width - @orbitWidthOffset) translateY(0 - @orbitHeightOffset);
+      z-index: 0;
     }
     50% {
       transform: translateZ((-@depth / 2) - @orbitDepthOffset) translateX(0 - @orbitWidthOffset) translateY(-@height - @orbitHeightOffset);
+      z-index: 0;
     }
     75% {
       transform: translateZ(0 - @orbitDepthOffset) translateX(-@width - @orbitWidthOffset) translateY(0 - @orbitHeightOffset);
+      z-index: 0;
     }
     100% {
       transform: translateZ((@depth / 2) - @orbitDepthOffset) translateX(0 - @orbitWidthOffset) translateY(@height - @orbitHeightOffset);
+      z-index: 3;
     }
 }
