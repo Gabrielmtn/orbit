@@ -14,6 +14,7 @@
 // These variables determine what is created and the magnitudes of what is created.
 @magnitudes: 4; // Defines the amount of levels that are created. ie. the levels of height, width and depth that are created.
 @durations: 10; // Defines the limit of duration that can be set for animation duration.
+@delays: 10; // Defines a limit on length of delay you can apply to an orbit.
 @orbitDepth: 1000px; //The depth must be defined in pixels. Defines the Z axis depth for Orbit.
 @orbitDepthOffset: 0px; // You can set an offset so that it doesn't feel like things are orbiting towards you and are instead more contained.
 @orbitHeightOffset: 0px;
@@ -63,6 +64,14 @@
   .genDurations(@n, (@i + 1));
 }
 .genDurations(@durations);
+
+.genDelays(@n, @i:1) when (@i <= @n) {
+  .orbit .planet[data-orbit-delay="@{i}"] {
+    animation-delay: (@i * 1s);
+  }
+  .genDelays(@n, (@i + 1));
+}
+.genDelays(@delays);
 
 // The element being orbited.
 .orbit .planet.center {
