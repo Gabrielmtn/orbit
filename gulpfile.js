@@ -9,6 +9,7 @@ var gulp = require('gulp'),
   rename = require('gulp-rename'),
   concat = require('gulp-concat'),
   deploy = require('gulp-gh-pages'),
+  filter = require('gulp-filter'),
   sources = {
     jade: 'src/jade/**/*.jade',
     overwatch: 'out/**/*.*',
