@@ -7,6 +7,8 @@
   padding: 10px;
   border-radius: 5px;
   color: #333;
+  max-width: 400px;
+  margin: 20px auto;
 }
 .planets {
   background: black;
@@ -16,18 +18,28 @@
   width: 100%;
   border-radius: 100%;
 }
+.planets {
+  border-radius: 5px 5px 5px 5px;
+}
 .planets .center div {
   background: grey;
-}
-.planets .red div {
-  background: red;
+  width: 50%;
+  height: 50%;
+  margin: 0 auto;
 }
 .planets .orange div {
   background: orange;
+  height: 10%;
+  width: 15%;
+}
+.planets .red div {
+  background: red;
+  height: 25%;
+  width: 15%;
 }
 .planets .green div {
   background: green;
-}
-.planets .blue div {
-  background: blue;
-}</style></head><body class="container"><header><div class="col-md-12"><ul style="margin:0 auto;" class="orbit"><li class="planet center"><div>o</div></li><li pause-on-hover data-orbit-width="1" data-orbit-depth="3" class="planet"><div>r</div></li><li pause-on-hover data-orbit-width="2" data-orbit-depth="3" class="planet"><div>b</div></li><li pause-on-hover data-orbit-width="3" data-orbit-depth="3" class="planet"><div>i</div></li><li pause-on-hover data-orbit-width="4" data-orbit-depth="3" class="planet"><div>t</div></li></ul></div></header><content><div class="col-md-4"><p class="info text-center"><strong>orbit.css</strong> is an experiment with CSS preprocessors to create an easily consumbale orbital effect for DOM elements.</p></div><div class="col-md-8"><ul style="margin:0 auto;" class="orbit planets"><li class="planet center"><div></div></li><li pause-on-hover data-orbit-width="1" data-orbit-depth="3" class="planet red"><div></div></li><li pause-on-hover data-orbit-width="2" data-orbit-depth="3" class="planet orange"><div></div></li><li pause-on-hover data-orbit-width="3" data-orbit-depth="3" class="planet green"><div></div></li><li pause-on-hover data-orbit-width="4" data-orbit-depth="3" class="planet blue"><div></div></li></ul></div></content></body>
+  height: 30%;
+  width: 40%;
+}</style></head><body class="container"><header class="row"><div class="col-md-12"><ul style="margin:0 auto;" class="orbit"><li class="planet center"><div>o</div></li><li pause-on-hover data-orbit-width="1" data-orbit-depth="3" class="planet"><div>r</div></li><li pause-on-hover data-orbit-width="2" data-orbit-depth="3" class="planet"><div>b</div></li><li pause-on-hover data-orbit-width="3" data-orbit-depth="3" class="planet"><div>i</div></li><li pause-on-hover data-orbit-width="4" data-orbit-depth="3" class="planet"><div>t</div></li></ul></div></header><content class="row"><div class="col-md-12"><p class="info text-center"><strong>orbit.css</strong> is an experiment with CSS preprocessors to create an easily consumbale orbital effect for DOM elements. It can be tweaked and configured to behave how you want. DOM element behaviour is then defined through data attributes. For example, the orbiting elements on this page can be paused on hover(tap on touch devices).</p></div><div class="col-md-12"><ul style="margin:0 auto;" class="orbit planets"><li class="planet center"><div></div></li><li pause-on-hover data-orbit-width="1" data-orbit-depth="1" data-orbit-duration="8" class="planet orange"><div></div></li><li pause-on-hover data-orbit-width="3" data-orbit-height="2" data-orbit-depth="2" data-orbit-duration="10" class="planet red"><div></div></li><li pause-on-hover data-orbit-width="4" data-orbit-depth="4" data-orbit-duration="5" class="planet green"><div></div></li></ul></div><div class="col-md-12"><p class="info text-center">You can configure things such as the <em>depth</em>, <em>width</em>, <em>height</em>, <em>speed</em> and <em>delay</em> for orbits.
+Check out the <a href="https://github.com/jh3y/orbit" target="_blank">docs</a> to see how to configure and use it in your own projects.</p></div><div class="col-md-12 text-center"><iframe src="http://ghbtns.com/github-btn.html?user=jh3y&amp;repo=orbit&amp;type=watch&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="90px" height="20"></iframe><iframe src="http://ghbtns.com/github-btn.html?user=jh3y&amp;repo=orbit&amp;type=fork&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="90px" height="20"></iframe><iframe src="http://ghbtns.com/github-btn.html?user=jh3y&amp;repo=orbit&amp;type=follow&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="120px" height="20"></iframe></div></content></body>
