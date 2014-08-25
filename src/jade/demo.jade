@@ -1,24 +1,95 @@
 doctype
+//[if lt IE 7]> <html class="no-js ie lt-ie9 lt-ie8 lt-ie7" lang="en" xmlns:ng="http://angularjs.org"> <![endif]
+//[if IE 7]> <html class="no-js ie lt-ie9 lt-ie8" lang="en" xmlns:ng="http://angularjs.org"> <![endif]
+//[if IE 8]> <html class="no-js ie lt-ie9" lang="en" xmlns:ng="http://angularjs.org"> <![endif]
+//[if gt IE 8]><!--> <html class="no-js" lang="en" xmlns:ng="http://angularjs.org"> <!--<![endif]
 head
-  title dev: orbit
+  meta(charset="utf-8")
+  meta(http-equiv="X-UA-Compatible", content="IE=edge")
+  title orbit: orbital effects in CSS
+  meta(name="viewport", content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1.0")
+  link(rel="author", href="https://plus.google.com/117254872800566192455/")
+  link(rel="author", href="Jhey Tompkins")
   link(rel="stylesheet", href="css/orbit.min.css")
-body
-  p(style="text-align:center;").
-    orbit is a little experiment with CSS keyframes to see if I can make an orbital effect with CSS.
-  footer
-    ul.orbit(style="margin:0 auto;")
-      li.planet.center
-        div
-          a o
-      li.planet(pause-on-hover, data-orbit-width="1", data-orbit-depth="3")
-        div
-          a r
-      li.planet(pause-on-hover, data-orbit-width="2", data-orbit-depth="3")
-        div
-          a b
-      li.planet(pause-on-hover, data-orbit-width="3", data-orbit-depth="3")
-        div
-          a i
-      li.planet(pause-on-hover, data-orbit-width="4", data-orbit-depth="3")
-        div
-          a t
+  link(rel="stylesheet", href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css")
+  style.
+    body {
+      background: #242e69;
+      color: #fff;
+    }
+    .info {
+      background: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      color: #333;
+      max-width: 400px;
+      margin: 20px auto;
+    }
+    .planets {
+      background: black;
+    }
+    .planets div {
+      height: 100%;
+      width: 100%;
+      border-radius: 100%;
+    }
+    .planets {
+      border-radius: 5px 5px 5px 5px;
+    }
+    .planets .center div {
+      background: grey;
+      width: 50%;
+      height: 50%;
+      margin: 0 auto;
+    }
+    .planets .orange div {
+      background: orange;
+      height: 10%;
+      width: 15%;
+    }
+    .planets .red div {
+      background: red;
+      height: 25%;
+      width: 15%;
+    }
+    .planets .green div {
+      background: green;
+      height: 30%;
+      width: 40%;
+    }
+body.container
+  header.row
+    .col-md-12
+      ul.orbit(style="margin:0 auto;")
+        li.planet.center
+          div o
+        li.planet(pause-on-hover, data-orbit-width="1", data-orbit-depth="3")
+          div r
+        li.planet(pause-on-hover, data-orbit-width="2", data-orbit-depth="3")
+          div b
+        li.planet(pause-on-hover, data-orbit-width="3", data-orbit-depth="3")
+          div i
+        li.planet(pause-on-hover, data-orbit-width="4", data-orbit-depth="3")
+          div t
+  content.row
+    .col-md-12
+      p.info.text-center.
+        <strong>orbit.css</strong> is an experiment with CSS preprocessors to create an easily consumbale orbital effect for DOM elements. It can be tweaked and configured to behave how you want. DOM element behaviour is then defined through data attributes. For example, the orbiting elements on this page can be paused on hover(tap on touch devices).
+    .col-md-12
+      ul.orbit.planets(style="margin:0 auto;")
+        li.planet.center
+          div
+        li.planet.orange(pause-on-hover, data-orbit-width="1", data-orbit-depth="1", data-orbit-duration="8")
+          div
+        li.planet.red(pause-on-hover, data-orbit-width="3", data-orbit-height="2", data-orbit-depth="2", data-orbit-duration="10")
+          div
+        li.planet.green(pause-on-hover, data-orbit-width="4", data-orbit-depth="4", data-orbit-duration="5")
+          div
+    .col-md-12
+      p.info.text-center.
+        You can configure things such as the <em>depth</em>, <em>width</em>, <em>height</em>, <em>speed</em> and <em>delay</em> for orbits.
+        Check out the <a href="https://github.com/jh3y/orbit" target="_blank">docs</a> to see how to configure and use it in your own projects.
+    .col-md-12.text-center
+        iframe(src = "http://ghbtns.com/github-btn.html?user=jh3y&repo=orbit&type=watch&count=true", allowtransparency="true", frameborder="0", scrolling="0", width="90px", height="20")
+        iframe(src = "http://ghbtns.com/github-btn.html?user=jh3y&repo=orbit&type=fork&count=true", allowtransparency="true", frameborder="0", scrolling="0", width="90px", height="20")
+        iframe(src = "http://ghbtns.com/github-btn.html?user=jh3y&repo=orbit&type=follow&count=true", allowtransparency="true", frameborder="0", scrolling="0", width="120px", height="20")
